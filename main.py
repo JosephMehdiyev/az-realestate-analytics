@@ -5,7 +5,7 @@ import time
 
 options = Options()
 driver = webdriver.Firefox(options = options)
-url = "https://bina.az/items/5320029"
+url = "https://bina.az/items/5379038"
 driver.get(url)
 time.sleep(1)
 html = driver.page_source
@@ -20,6 +20,13 @@ adress= adress_element.text.strip() if adress_element else "N/A"
 product_views_element = soup.find("span", class_ = "product-statistics__i-text")
 product_views = product_views_element.text.strip() if product_views_element else "N/A"
 
+is_agent_element = soup.find("div", class_ ="product-owner__info-region")
+is_agentt = is_agent_element.text.strip() if is_agent_element else "N/A"
+if is_agentt == "mülkiyyətçi":
+    is_agentt = False
+else:
+    is_agentt = True
+
 
 search_properties = ["Kateqoriya", "Sahə", "Çıxarış", "Təmir", "Mərtəbə", "Otaq sayı", "İpoteka"]
 
@@ -29,13 +36,22 @@ for x  in product_properties:
         if y in x.text:
             parent = x.find_parent("div")
             if parent:
-                price_square_element = parent.find("span", class_="product-properties__i-value")
-                price_square = price_square_element.text.strip() if price_square_element else "N/A"
-                print(f"{y}: {price_square}")
+                value_element = parent.find("span", class_="product-properties__i-value")
+                price_value = value_element.text.strip() if value_element else "N/A"
+                if y == "Təmir" or y == "İpoteka" or y == "Çıxarış":
+                    if price_value == "var":
+                        price_value = True
+                    else:
+                        price_value = False
+                if y == "Sahə":
+                    price_value = float(price_value.split()[0])
+                print(f"{y}: {price_value}")
 
 print(f"Price: {price}")
 print(f"Adress: {adress}")
 print(f"Views: {product_views}")
+print(f"Product Owner: {is_agentt}")
+
 
 
 

@@ -1,0 +1,29 @@
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from bs4 import BeautifulSoup
+import time
+
+options = Options()
+driver = webdriver.Firefox(options = options)
+
+url = "https://bina.az/items/5372900"
+driver.get(url)
+
+time.sleep(2)
+
+html = driver.page_source
+
+soup = BeautifulSoup(html, "html.parser")
+
+price_element = soup.find("span", class_="price-val")
+price = price_element.text.strip() if price_element else "N/A"
+
+product_properties = soup.find_all("span", class_="product-properties__i-name")
+printf(product_properties)
+
+
+print(f"Price: {price}")
+
+
+driver.quit()
+

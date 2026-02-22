@@ -1,5 +1,12 @@
+## TODO List
+So I do not forget doing them later.
+ 1. Data Pre-processing
+- [ ] **Floors**: Extract current floor number in integer values. For some reason I made them in text?
+- [ ] **City/Region**: currently only the exact address is avaliable in the data. 
+2. Statistical Analysis and visualizations (in general)
+
 # About the Project
-This project is about the Real Estate market of Azerbaijan. The data is scraped from the most used (and probably the only one everyone knows) website **bina.az**, tidied (According to Tidyverse schema) and stored in PostgreSQL, statistical and data analysis are made in R Tidyverse packages.
+This project is about the Real Estate market of Azerbaijan. The data is scraped from the most used (second is probably yeniemlak.az) website **bina.az**, tidied (According to Tidyverse schema) and stored in PostgreSQL, statistical and data analysis are made in R Tidyverse packages.
 # About the Data
 As of writing there are total **24413** rows of data in the database. See the below table for the explanations of column variables.
 
@@ -14,7 +21,7 @@ As of writing there are total **24413** rows of data in the database. See the be
         <li><b>id:</b> (Key) Unique key identifier for each row.</li>
         <li><b>created_at:</b> (Time) When this specific row of data was scraped from the website.</li>
         <li><b>ipoteka:</b> (Boolean) Translates into Mortgage. Whether if Mortgage is avaliable or not. </li>
-        <li><b>azn_area:</b> (Float) Price in AZN per square meter of the estate.</li>
+        <li><b>azn_area:</b> (Float) Price in AZN per one square meter of the estate.</li>
         <li><b>is_renovated:</b> (Boolean) Whether if the estate has been renovated recently.</li>
         <li><b>has_certificate:</b> (Boolean) Refers to the presence of the <b>Çıxarış</b> (official document about the ownership of the estate).</li>
         <li><b>total_room:</b> (Int) Number of the rooms of the estate.</li>
@@ -33,7 +40,7 @@ As of writing there are total **24413** rows of data in the database. See the be
   </tr>
 </table>
 
-### Here is the first 5 row of the database:
+**Here is the first 5 row of the database:**
 
 | id|created_at          |ipoteka |  azn_area|is_renovated |has_certificate | total_room|  area|floor_number |building_type     |selling_type |is_agent_listed |agency_name | views|location                                            |   price|rent_type | website_id|
 |--:|:-------------------|:-------|---------:|:------------|:---------------|----------:|-----:|:------------|:-----------------|:------------|:---------------|:-----------|-----:|:---------------------------------------------------|-------:|:---------|----------:|
@@ -43,7 +50,6 @@ As of writing there are total **24413** rows of data in the database. See the be
 |  4|2025-11-16 18:51:30 |NA      |  898.1481|FALSE        |TRUE            |          8| 540.0|NA           |Həyət evi/Bağ evi |Satış        |TRUE            |N/A         |  4490|Salyan şossesi                                      |  485000|N/A       |    5292754|
 |  5|2025-11-16 18:51:33 |TRUE    | 3740.0000|FALSE        |FALSE           |          2| 109.5|2 / 7        |Yeni tikili       |Satış        |TRUE            |N/A         |   264|Sea Breeze                                          |  409530|N/A       |    5552043|
 > 
-
 # Data Pipeline
 1) Data is scraped from the  **bina.az** website using BeautifulSoup and Selenium.
 2) Data is tidied (Tidyverse) and stored in PostgreSQL database
@@ -51,4 +57,17 @@ As of writing there are total **24413** rows of data in the database. See the be
 4) At last the statistical analysis or data visualization starts
 5) The results are published in README.md
 
+
+# Renting Market
+As of writing, there are total of 4495 rows of data about renting lists in the database
+### Distribution of the prices
+The log of price (in AZN) follows a normal distribution, which is expected since real estate markets are usually modeled with log-normal distributions.
+
+QQ-plot:
+![Correlation Plot](QQplot_rent.png)
+According to the QQ-plot, the data has high kurtosis. This may be due to specific reasons such as:
+* Miss-input of the users such as listing the post as for rent while it was intended for sale.
+* Users that looking for roommates listing their posts as rents (dramatically lowers the place).
+* Substancial difference of prices between regions, city centers etc.
+* Luxury listings such as Villas that have big seashore land (unusual).
 
